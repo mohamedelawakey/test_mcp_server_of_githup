@@ -16,6 +16,6 @@ EXPOSE 8000
 
 RUN ln -sf /usr/local/bin/python3 /usr/local/bin/python
 # If you modified the code above
-CMD ["python", "server_github.py"]
+CMD ["python3", "server_github.py"]
 # Or use the CLI instead of the previous line:
 # CMD ["fastmcp", "run", "server_github.py:mcp", "--transport", "sse", "--host", "0.0.0.0", "--port", "8000", "--path", "/mcp"]
