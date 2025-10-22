@@ -506,6 +506,6 @@ if __name__ == "__main__":
     log.info(f"Starting MCP server | BASE_URL={BASE_URL}")
     mcp.run(
         transport="http",
-        port=8000,
+        port=int(os.getenv("PORT", "8000")),
         path="/mcp"
     )
