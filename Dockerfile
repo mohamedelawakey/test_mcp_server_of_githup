@@ -13,6 +13,6 @@ COPY . .
 
 # Run as an SSE server
 EXPOSE 8000
-CMD ["python", "server.py"] # If you modified the code above
+CMD ["python3", "server.py"] # If you modified the code above
 # Or use the CLI instead of the previous line:
 # CMD ["fastmcp", "run", "server.py:mcp", "--transport", "sse", "--host", "0.0.0.0", "--port", "8000", "--path", "/mcp"]
