@@ -504,8 +504,14 @@ def pr_open(repo: str,
 # Entry Point
 if __name__ == "__main__":
     log.info(f"Starting MCP server | BASE_URL={BASE_URL}")
+    """
+    mcp = FastMCP(
+        "GitHub MCP Server",
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", "8000"))
+    )
+    """
+    # transport="stdio"
     mcp.run(
-        transport="http",
-        port=int(os.getenv("PORT", "8000")),
-        path="/mcp"
+        transport="sse"
     )
