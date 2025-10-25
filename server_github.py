@@ -18,13 +18,18 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(message)s",
     handlers=[
         logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8"),
-        logging.StreamHandler()  # still prints to console
+        logging.StreamHandler()
     ],
 )
 
 log = logging.getLogger("GitHub")
 
-mcp = FastMCP("GitHub MCP Server")
+# Get host and port from environment
+HOST = os.getenv("HOST", "0.0.0.0")
+PORT = int(os.getenv("PORT", "8000"))
+
+# Initialize MCP with host and port
+mcp = FastMCP("GitHub MCP Server", host=HOST, port=PORT)
 
 API_KEY = os.getenv("GITHUB_TOKEN", "")
 GITHUB_USERNAME = os.getenv("GITHUB_USERNAME", "")
@@ -225,7 +230,7 @@ def api_update_issue(
         if body is not None:
             patch_payload["body"] = body
         if state is not None:
-            patch_payload["state"] = state  # e.g., "open" or "closed"
+            patch_payload["state"] = state
         if labels is not None:
             patch_payload["labels"] = labels
         if assignees is not None:
@@ -295,7 +300,6 @@ def create_repo(
     log.info(f"Creating repo: {name}")
     try:
         repo = api_create_repo(name, desc, private)
-        # repo_id = repo.get("id") or repo.get("name") or name
         repo_url = repo.get("html_url") or repo.get("web_url") or "N/A"
         readme_status = "skipped"
         if create_readme:
@@ -454,7 +458,6 @@ def issue_update(
             x.strip() for x in assignees_csv.split(",") if x.strip()
         ] if assignees_csv else None
         st = state or None
-        # Empty strings -> None (skip)
         t = title or None
         b = body or None
         c = comment or None
@@ -504,14 +507,7 @@ def pr_open(repo: str,
 # Entry Point
 if __name__ == "__main__":
     log.info(f"Starting MCP server | BASE_URL={BASE_URL}")
-    """
-    mcp = FastMCP(
-        "GitHub MCP Server",
-        host="0.0.0.0",
-        port=int(os.getenv("PORT", "8000"))
-    )
-    """
-    # transport="stdio"
-    mcp.run(
-        transport="sse"
-    )
+    log.info(f"Binding to {HOST}:{PORT}")
+
+    # Use SSE transport
+    mcp.run(transport="sse")
