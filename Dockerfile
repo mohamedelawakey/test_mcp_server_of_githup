@@ -2,9 +2,6 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-ARG BUILD_ID=2025-10-27-01
-ENV BUILD_ID=$BUILD_ID
-
 # Install dependencies
 COPY requirements.txt .
 RUN python -m pip install --upgrade pip setuptools wheel \
