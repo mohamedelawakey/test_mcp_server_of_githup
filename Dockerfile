@@ -17,10 +17,14 @@ EXPOSE 8000
 ENV HOST=0.0.0.0
 ENV PORT=8000
 
+# Force rebuild timestamp - prevents cloud caching
+ENV BUILD_DATE=2025-10-27T05:30:00
+ENV VERSION=2.0
+
 # Health check - just check if port is responding
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD python -c "import socket; s=socket.socket(); s.settimeout(2); s.connect(('localhost', 8000)); s.close()" || exit 1
 
-# Run the server directly with python (no fastmcp CLI needed)
-# server_github.py
-CMD ["python", "/app/server_github.py"]
+# Run the server directly with python - unbuffered output
+# server_github
+CMD ["python", "-u", "/app/server.py"]
